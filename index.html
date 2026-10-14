@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arm Wrestling Card Game Browser</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="browser-container">
+        <!-- Browser Header Bar -->
+        <header class="browser-header">
+            <div class="browser-controls">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            <div class="address-bar">
+                <span class="lock-icon">🔒</span>
+                <input type="text" value="ingame://armwrestling-arena/browser" readonly>
+            </div>
+        </header>
+
+        <!-- Main Game Content -->
+        <main class="game-window">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar">
+                <div class="game-logo">💪 ARMArena</div>
+                <div class="currency-display">
+                    <div class="currency-item">🪙 Coins: <span id="coin-count">500</span></div>
+                    <div class="currency-item">🎟️ Tokens: <span id="token-count">10</span></div>
+                </div>
+                <ul class="nav-links">
+                    <li class="active" data-tab="battle">🏟️ Battle Arena</li>
+                    <li data-tab="store">🛒 Card Shop</li>
+                    <li data-tab="collection">🎴 My Collection (<span id="collection-count">0</span>)</li>
+                </ul>
+            </nav>
+
+            <!-- Active View Area -->
+            <section class="content-area">
+                <!-- Battle Screen -->
+                <div id="battle-tab" class="tab-content active">
+                    <h2>Choose an Opponent</h2>
+                    <p>Defeat wrestlers to win Battle Tokens!</p>
+                    <div class="opponent-grid" id="opponent-grid"></div>
+                </div>
+
+                <!-- Store Screen -->
+                <div id="store-tab" class="tab-content">
+                    <h2>Booster Pack Store</h2>
+                    <p>Spend your Coins to acquire random Arm Wrestling legends.</p>
+                    <div class="store-grid">
+                        <div class="pack-card standard-pack">
+                            <div class="pack-art">💪🏽</div>
+                            <h3>Novice Booster</h3>
+                            <p>Contains 3 random wrestlers</p>
+                            <button class="buy-btn" data-cost="100" data-pack="novice">Buy for 100 🪙</button>
+                        </div>
+                        <div class="pack-card elite-pack">
+                            <div class="pack-art">🔥</div>
+                            <h3>Elite Booster</h3>
+                            <p>Contains 5 random high-tier wrestlers</p>
+                            <button class="buy-btn" data-cost="250" data-pack="elite">Buy for 250 🪙</button>
+                        </div>
+                    </div>
+                    <div class="exchange-section">
+                        <h3>Token Exchange Counter</h3>
+                        <p>Trade 5 Battle Tokens for 150 Coins</p>
+                        <button id="exchange-btn">Trade 5 Tokens 🎟️ ➔ 150 Coins 🪙</button>
+                    </div>
+                </div>
+
+                <!-- Collection Screen -->
+                <div id="collection-tab" class="tab-content">
+                    <h2>Your Card Collection</h2>
+                    <div class="collection-grid" id="collection-grid">
+                        <p class="empty-msg">Your collection is empty. Go open some Booster Packs!</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Notification Modal for Pack Opening -->
+    <div class="modal" id="pack-modal">
+        <div class="modal-content">
+            <h2>You Unboxed:</h2>
+            <div id="unboxed-cards" class="unboxed-grid"></div>
+            <button id="close-modal-btn">Claim Cards</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+/* ==========================================================================
+   1. GLOBAL RESET & BASE STYLES
+   ========================================================================== */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif; 
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body { 
+    background: radial-gradient(circle at center, #1e1e24 0%, #111115 100%);
+    color: #f5f6fa; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    padding: 20px; 
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar for modern feel */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #ff9f43;
+}
+
+/* ==========================================================================
+   2. BROWSER FRAME MOCKUP
+   ========================================================================== */
+.browser-container { 
+    width: 100%; 
+    max-width: 1280px; 
+    height: 850px; 
+    background-color: #1c1c1f; 
+    border-radius: 16px; 
+    box-shadow: 0 30px 70px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05); 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    border: 1px solid rgba(255,255,255,0.08); 
+    transition: all 0.3s ease;
+}
+
+.browser-header { 
+    background: linear-gradient(to bottom, #252529, #1c1c1f); 
+    padding: 12px 24px; 
+    display: flex; 
+    align-items: center; 
+    border-bottom: 1px solid rgba(0,0,0,0.3); 
+}
+
+.browser-controls { 
+    display: flex; 
+    gap: 8px; 
+    margin-right: 24px; 
+}
+
+.dot { 
+    width: 13px; 
+    height: 13px; 
+    border-radius: 50%; 
+    display: inline-block; 
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.2);
+}
+.red { background-color: #ff5f56; } 
+.yellow { background-color: #ffbd2e; } 
+.green { background-color: #27c93f; } 
+
+.address-bar { 
+    background-color: #111113; 
+    flex-grow: 1; 
+    border-radius: 8px; 
+    display: flex; 
+    align-items: center; 
+    padding: 8px 16px; 
+    gap: 12px; 
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+.address-bar input { 
+    background: none; 
+    border: none; 
+    color: #8e8e93; 
+    width: 100%; 
+    font-size: 13px; 
+    letter-spacing: 0.3px;
+    outline: none; 
+}
+
+/* ==========================================================================
+   3. INTERNAL GAME LAYOUT
+   ========================================================================== */
+.game-window { 
+    display: flex; 
+    flex-grow: 1; 
+    overflow: hidden; 
+}
+
+.sidebar { 
+    width: 260px; 
+    background-color: #141416; 
+    padding: 24px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 30px; 
+    border-right: 1px solid rgba(255,255,255,0.05); 
+}
+
+.game-logo { 
+    font-size: 24px; 
+    font-weight: 800; 
+    color: #ff9f43; 
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 15px rgba(255,159,67,0.3);
+    text-align: center;
+    border-bottom: 2px dashed rgba(255,159,67,0.2);
+    padding-bottom: 15px;
+}
+
+.currency-display { 
+    background: linear-gradient(145deg, #1e1e22, #18181b); 
+    padding: 16px; 
+    border-radius: 12px; 
+    border: 1px solid rgba(255,255,255,0.05); 
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.currency-item { 
+    font-size: 14px; 
+    font-weight: 600; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    color: #a4a4a8;
+}
+.currency-item span:last-child {
+    color: #fff;
+    font-family: monospace;
+    font-size: 16px;
+}
+.currency-item:last-child { margin-bottom: 0; }
+
+.nav-links { 
+    list-style: none; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+}
+
+.nav-links li { 
+    padding: 14px 18px; 
+    border-radius: 10px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    color: #a4a4a8;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-links li:hover { 
+    background-color: rgba(255,255,255,0.03); 
+    color: #fff;
+    transform: translateX(4px);
+}
+
+.nav-links li.active { 
+    background: linear-gradient(135deg, #ff9f43, #ff7f11); 
+    color: #111113; 
+    box-shadow: 0 4px 15px rgba(255,159,67,0.3);
+}
+
+.content-area { 
+    flex-grow: 1; 
+    padding: 30px; 
+    overflow-y: auto; 
+    background-color: #18181b; 
+}
+
+.tab-content { display: none; animation: fadeIn 0.4s ease forwards; }
+.tab-content.active { display: block; }
+
+h2 { 
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px; 
+    color: #ffffff; 
+}
+p { 
+    color: #8e8e93; 
+    margin-bottom: 24px; 
+    font-size: 14px; 
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   4. CARD VISUAL DESIGN (WRESTLERS)
+   ========================================================================== */
+.opponent-grid, .collection-grid, .unboxed-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+    gap: 24px; 
+}
+
+.wrestler-card { 
+    background: linear-gradient(180deg, #242428 0%, #18181b 100%); 
+    border: 1px solid rgba(255,255,255,0.1); 
+    border-radius: 14px; 
+    padding: 20px; 
+    text-align: center; 
+    position: relative; 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4); 
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    overflow: hidden;
+}
+
+.wrestler-card:hover { 
+    transform: translateY(-8px) scale(1.02); 
+    border-color: rgba(255,255,255,0.3);
+}
+
+/* Tiers Styling Custom Overlays */
+.wrestler-card.tier-legendary { border-color: #d4af37; box-shadow: 0 0 20px rgba(212,175,55,0.25); }
+.wrestler-card.tier-epic      { border-color: #a335ee; box-shadow: 0 0 20px rgba(163,53,238,0.25); }
+.wrestler-card.tier-rare      { border-color: #0070dd; box-shadow: 0 0 20px rgba(0,112,221,0.25); }
+.wrestler-card.tier-common    { border-color: #4e4e54; }
+
+.card-tier { 
+    font-size: 9px; 
+    letter-spacing: 1px;
+    text-transform: uppercase; 
+    font-weight: 800; 
+    padding: 4px 8px; 
+    border-radius: 20px; 
+    position: absolute; 
+    top: 12px; 
+    right: 12px; 
+}
+.tier-legendary .card-tier { background-color: #d4af37; color: #000; }
+.tier-epic .card-tier      { background-color: #a335ee; color: #fff; }
+.tier-rare .card-tier      { background-color: #0070dd; color: #fff; }
+.tier-common .card-tier    { background-color: #3a3a3c; color: #d1d1d6; }
+
+.avatar { 
+    font-size: 56px; 
+    margin: 20px 0 12px 0; 
+    filter: drop-shadow(0 8px 8px rgba(0,0,0,0.5));
+    display: inline-block;
+}
+
+.wrestler-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.stats { 
+    margin-top: 16px; 
+    text-align: left; 
+    font-size: 13px; 
+    background: rgba(0, 0, 0, 0.4); 
+    padding: 12px; 
+    border-radius: 10px; 
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.stats div { 
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 6px; 
+    color: #a4a4a8;
+}
+.stats div span:last-child {
+    font-weight: bold;
+    color: #fff;
+}
+.stats div:last-child { margin-bottom: 0; }
+
+.battle-btn { 
+    width: 100%; 
+    background: linear-gradient(135deg, #ee5253, #ff6b6b); 
+    border: none; 
+    color: white; 
+    padding: 10px; 
+    border-radius: 8px; 
+    margin-top: 16px; 
+    cursor: pointer; 
+    font-weight: 700; 
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 10px rgba(238,82,83,0.3);
+    transition: all 0.2s ease;
+}
+.battle-btn:hover { 
+    filter: brightness(1.1);
+    box-shadow: 0 6px 15px rgba(238,82,83,0.5);
+}
+
+/* ==========================================================================
+   5. STORE VIEW & PACK OPENINGS
+   ========================================================================== */
+.store-grid { 
+    display: flex; 
+    gap: 24px; 
+    margin-bottom: 35px; 
+    flex-wrap: wrap;
+}
+
+.pack-card { 
+    background: linear-gradient(145deg, #222227, #1c1c1f); 
+    border: 2px dashed rgba(255,159,67,0.3); 
+    border-radius: 16px; 
+    padding: 30px; 
+    text-align: center; 
+    flex: 1; 
+    min-width: 250px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+.pack-card:hover {
+    border-style: solid;
+    border-color: #ff9f43;
+    transform: translateY(-4px);
+}
+
+.pack-art { 
+    font-size: 64px; 
+    margin-bottom: 20px; 
+    animation: floating 3s ease-in-out infinite;
+}
+
+.buy-btn, #exchange-btn { 
+    background: linear-gradient(135deg, #10ac84, #1dd1a1); 
+    color: white; 
+    border: none; 
+    padding: 12px 24px; 
+    border-radius: 8px; 
+    font-weight: 700; 
+    letter-spacing: 0.5px;
+    cursor: pointer; 
+    margin-top: 20px; 
+    box-shadow: 0 4px 12px rgba(16,172,132,0.3);
+    transition: all 0.2s ease;
+}
+.buy-btn:hover, #exchange-btn:hover { 
+    filter: brightness(1.1);
+    box-shadow: 0 6px 18px rgba(16,172,132,0.5);
+}
+
+.exchange-section { 
+    background-color: #141416; 
+    padding: 25px; 
+    border-radius: 14px; 
+    border: 1px solid rgba(255,255,255,0.05); 
+}
+
+/* ==========================================================================
+   6. ANIMATED POPUP MODAL (GLASSMORPHISM)
+   ========================================================================== */
+.modal { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(10,10,12,0.85); 
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 100; 
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity 0.3s ease; 
+}
+
+.modal.open { 
+    opacity: 1; 
+    pointer-events: auto; 
+}
+
+.modal-content { 
+    background: linear-gradient(145deg, #222226, #141416); 
+    padding: 40px; 
+    max-height: 90vh;
+    overflow-y: auto;
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+    border: 2px solid #ff9f43;
+    border-radius: 12px;
+}
+
+.modal-content h2 { margin-bottom: 20px; }
+
+#close-modal-btn {
+    background-color: #ff9f43;
+    color: #111;
+    border: none;
+    padding: 12px 30px;
+    font-weight: bold;
+    border-radius: 6px;
+    margin-top: 25px;
+    cursor: pointer;
+}
+
+.empty-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #777;
+    padding: 40px;
+}
